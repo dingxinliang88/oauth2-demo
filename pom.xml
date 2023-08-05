@@ -10,6 +10,7 @@
     <modules>
         <module>gateway-service</module>
         <module>user-service</module>
+        <module>oauth2-service</module>
     </modules>
     <version>0.0.1</version>
 
