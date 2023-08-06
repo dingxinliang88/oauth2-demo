@@ -16,7 +16,6 @@
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.cloud.oauth2.version>2.2.5.RELEASE</spring.cloud.oauth2.version>
-        <mysql.version>8.0.31</mysql.version>
     </properties>
 
     <dependencies>
@@ -49,7 +48,6 @@
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
-            <version>${mysql.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
