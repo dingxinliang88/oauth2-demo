@@ -13,7 +13,7 @@ public class RespUtils {
                 .build();
     }
 
-    public static CommonResponse fail(Integer code, String msg, Object content) {
+    public static CommonResponse fail(Integer code, Object content, String msg) {
         return CommonResponse.builder()
                 .code(code)
                 .msg(msg)

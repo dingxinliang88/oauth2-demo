@@ -1,0 +1,33 @@
+server:
+  port: 9011
+
+spring:
+  application:
+    name: sms-service
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.18.4:8837,192.168.18.4:8848,192.168.18.4:8859
+      config:
+        server-addr: 192.168.18.4:8837,192.168.18.4:8848,192.168.18.4:8859
+        file-extension: yaml
+  redis:
+    host: 8.130.102.239
+    port: 6379
+    timeout: 10s
+    lettuce:
+      pool:
+        max-active: 50
+        max-idle: 50
+        max-wait: -1ms
+        min-idle: 0
+tencent:
+  sms:
+    secretId: xxx
+    secretKey: xxx
+    region: xxx
+    appId: xxx
+    signName: xxx
+    template-id:
+      phoneCode: xxx
+      sales: xxx

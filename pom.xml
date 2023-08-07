@@ -12,6 +12,7 @@
         <module>user-service</module>
         <module>oauth2-service</module>
         <module>common</module>
+        <module>sms-service</module>
     </modules>
     <version>0.0.1</version>
 

@@ -29,7 +29,8 @@ public class AuthFilter implements GlobalFilter, Ordered {
     private static final AntPathMatcher ANT_PATH_MATCHER = new AntPathMatcher();
     private static final Set<String> WHITE_ACCESS_URLS = new ConcurrentSkipListSet<>() {{
         add("/**/oauth/**");
-        add("/user/register");
+        add("/**/user/register/**");
+        add("/**/user/login/**");
     }};
 
     /**
