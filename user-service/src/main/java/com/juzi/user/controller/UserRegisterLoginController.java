@@ -6,6 +6,8 @@ import com.juzi.user.service.UserRegisterLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author codejuzi
  */
@@ -16,13 +18,7 @@ public class UserRegisterLoginController {
     @Autowired
     private UserRegisterLoginService userRegisterLoginService;
 
-
-    /**
-     * 用户名 - 密码注册
-     *
-     * @param user 用户注册信息
-     * @return 用户信息 + OAuth2 信息
-     */
+    // region register
     @PostMapping("/register/name-password")
     public CommonResponse namePasswordRegister(@RequestBody User user) {
         return userRegisterLoginService.namePasswordRegister(user);
@@ -33,4 +29,24 @@ public class UserRegisterLoginController {
         return userRegisterLoginService.phoneCodeRegister(phoneNumber, code);
     }
 
+    /**
+     * 此接口提供给 gitee 平台使用，用于第三方登录
+     */
+    @RequestMapping("/register/gitee")
+    public CommonResponse thirdPlatformGiteeRegister(HttpServletRequest request) {
+        return userRegisterLoginService.thirdPlatformGiteeRegister(request);
+    }
+
+    // endregion
+
+    // region login
+
+    @PostMapping("/login")
+    public CommonResponse login(@RequestParam String username,
+                                @RequestParam String password) {
+        return userRegisterLoginService.login(username, password);
+    }
+
+
+    // endregion
 }

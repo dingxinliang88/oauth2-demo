@@ -31,9 +31,21 @@ public class RestTemplateConfig {
         return httpRequestFactory;
     }
 
-    @Bean
+    @Bean(name = "innerRestTemplate")
     @LoadBalanced
-    public RestTemplate restTemplate() {
+    public RestTemplate innerRestTemplate() {
+        RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory());
+        for (HttpMessageConverter<?> messageConverter : restTemplate.getMessageConverters()) {
+            if (messageConverter instanceof StringHttpMessageConverter) {
+                // 一般接收 UTF-8 的消息
+                ((StringHttpMessageConverter) messageConverter).setDefaultCharset(StandardCharsets.UTF_8);
+            }
+        }
+        return restTemplate;
+    }
+
+    @Bean(name = "outerRestTemplate")
+    public RestTemplate outerRestTemplate() {
         RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory());
         for (HttpMessageConverter<?> messageConverter : restTemplate.getMessageConverters()) {
             if (messageConverter instanceof StringHttpMessageConverter) {

@@ -1,8 +1,10 @@
 package com.juzi.user.service.impl;
 
+import cn.hutool.json.JSONObject;
 import com.juzi.common.resp.CommonResponse;
 import com.juzi.common.resp.RespCodeEnum;
 import com.juzi.common.resp.RespUtils;
+import com.juzi.user.config.GiteeConfig;
 import com.juzi.user.pojo.enums.AuthGrantType;
 import com.juzi.user.pojo.enums.RegisterType;
 import com.juzi.user.pojo.po.OAuth2Client;
@@ -28,6 +30,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -49,10 +52,16 @@ public class UserRegisterLoginServiceImpl implements UserRegisterLoginService {
     private RedisCommonProcessor redisCommonProcessor;
 
     @Autowired
-    private RestTemplate restTemplate;
+    private RestTemplate innerRestTemplate;
+
+    @Autowired
+    private RestTemplate outerRestTemplate;
 
     @Resource(name = "transactionManager")
     private JpaTransactionManager transactionManager;
+
+    @Autowired
+    private GiteeConfig giteeConfig;
 
     @Override
     public CommonResponse namePasswordRegister(User user) {
@@ -66,11 +75,11 @@ public class UserRegisterLoginServiceImpl implements UserRegisterLoginService {
         user.setPasswd(bCryptPasswordEncoder.encode(originPwd));
 
         OAuth2Client oAuth2Client = OAuth2Client.builder()
-                // todo 自定义生成 client id
                 .clientId(user.getUserName())
                 .clientSecret(user.getPasswd())
                 .resourceIds(RegisterType.USER_PASSWORD.name())
-                .authorizedGrantTypes(AuthGrantType.refresh_token.name().concat(",").concat(AuthGrantType.password.name()))
+                .authorizedGrantTypes(AuthGrantType.refresh_token.name().concat(",")
+                        .concat(AuthGrantType.password.name()))
                 .scope("web")
                 .authorities(RegisterType.USER_PASSWORD.name())
                 .build();
@@ -132,6 +141,74 @@ public class UserRegisterLoginServiceImpl implements UserRegisterLoginService {
         );
     }
 
+    @Override
+    public CommonResponse thirdPlatformGiteeRegister(HttpServletRequest request) {
+        String code = request.getParameter("code");
+        String state = request.getParameter("state");
+        if (!giteeConfig.getState().equals(state)) {
+            return RespUtils.fail(RespCodeEnum.BAD_REQUEST.getCode(), null, "Invalid State!");
+        }
+        // https://gitee.com/oauth/token?grant_type=authorization_code&client_id=%s&client_secret=%s&redirect_uri=%s&code=%s
+        String tokenUrl = String.format(giteeConfig.getTokenUrl(),
+                giteeConfig.getClientId(), giteeConfig.getClientSecret(),
+                giteeConfig.getCallBack(), code);
+
+        JSONObject tokenRes = outerRestTemplate.postForObject(tokenUrl, null, JSONObject.class);
+        assert tokenRes != null;
+        String token = String.valueOf(tokenRes.get("access_token"));
+
+        // https://gitee.com/api/v5/user?access_token=%s
+        String userUrl = String.format(giteeConfig.getUserUrl(), token);
+        JSONObject giteeUserInfo = outerRestTemplate.getForObject(userUrl, JSONObject.class);
+        assert giteeUserInfo != null;
+
+        String username = giteeConfig.getState().concat("-").concat(String.valueOf(giteeUserInfo.get("login")));
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        String encodePwd = bCryptPasswordEncoder.encode(username);
+
+        User user = userRepository.findByUserName(username);
+        if (Objects.isNull(user)) {
+            user = User.builder()
+                    .userName(username)
+                    .passwd("")
+                    .userRole(RegisterType.THIRD_PARTY.name())
+                    .build();
+            OAuth2Client oAuth2Client = OAuth2Client.builder()
+                    .clientId(username)
+                    .clientSecret(encodePwd)
+                    .resourceIds(RegisterType.THIRD_PARTY.name())
+                    .authorizedGrantTypes(AuthGrantType.refresh_token.name().concat(",")
+                            .concat(AuthGrantType.client_credentials.name()))
+                    .scope("web")
+                    .authorities(RegisterType.THIRD_PARTY.name())
+                    .build();
+            Integer uid = saveUserAndOAuth2Client(user, oAuth2Client);
+            String personId = String.valueOf(uid + 10000000);
+            redisCommonProcessor.setExpiredDays(personId, user, 30);
+        }
+        return RespUtils.success(
+                formatUserAndToken(user,
+                        generateOAuthToken(AuthGrantType.client_credentials, null, null, username, username))
+        );
+    }
+
+    @Override
+    public CommonResponse login(String username, String password) {
+        User user = userRepository.findByUserName(username);
+        if (Objects.isNull(user)) {
+            return RespUtils.fail(RespCodeEnum.BAD_REQUEST.getCode(), null, "User Not Exists!");
+        }
+
+        Map<String, Object> content = formatUserAndToken(user,
+                generateOAuthToken(AuthGrantType.password, username, password, username, password));
+
+        // 刷新缓存用户信息过期时间
+        String personId = String.valueOf(user.getId() + 10000000);
+        redisCommonProcessor.setExpiredDays(personId, user, 30);
+
+        return RespUtils.success(content);
+    }
+
     private String getSystemDefineUserName(String phoneNumber) {
         //前缀 MALL_ + 当前时间戳 + 手机号后4位
         return "MALL_" + System.currentTimeMillis() + phoneNumber.substring(phoneNumber.length() - 4);
@@ -159,7 +236,7 @@ public class UserRegisterLoginServiceImpl implements UserRegisterLoginService {
             params.add("password", password);
         }
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(params, headers);
-        return restTemplate.postForObject("http://oauth2-service/oauth/token", requestEntity, Map.class);
+        return innerRestTemplate.postForObject("http://oauth2-service/oauth/token", requestEntity, Map.class);
     }
 
     private Integer saveUserAndOAuth2Client(User user, OAuth2Client oAuth2Client) {

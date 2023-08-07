@@ -26,3 +26,12 @@ spring:
         max-idle: 50
         max-wait: -1ms
         min-idle: 0
+
+third-party:
+  gitee:
+    clientId: 2ad120f48f602decb79bdc8c4cd29728e5aa80d598ccdfdc4c13495fdc1d68f6
+    clientSecret: fd363b307c41eee9330ef3eca7ddf5d0e80349490ffc421b862b12ebaa378ed0
+    call-back: http://localhost:9001/user/register/gitee
+    token-url: https://gitee.com/oauth/token?grant_type=authorization_code&client_id=%s&client_secret=%s&redirect_uri=%s&code=%s
+    user-url: https://gitee.com/api/v5/user?access_token=%s
+    state: GITEE
