@@ -11,7 +11,7 @@ spring:
     username: guest
     password: guest
   redis:
-    host: 8.130.102.239
+    host: please replace it with your own
     port: 6379
     timeout: 10s
     lettuce:

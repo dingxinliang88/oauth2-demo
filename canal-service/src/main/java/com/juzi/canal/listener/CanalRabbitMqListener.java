@@ -1,7 +1,5 @@
 package com.juzi.canal.listener;
 
-import cn.hutool.json.JSONArray;
-import cn.hutool.json.JSONObject;
 import com.google.gson.Gson;
 import com.juzi.canal.pojo.CanalMessage;
 import com.juzi.canal.utils.RedisCommonProcessor;

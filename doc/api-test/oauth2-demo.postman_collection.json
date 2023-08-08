@@ -1,0 +1,521 @@
+{
+	"info": {
+		"_postman_id": "a25ac002-491b-43c2-b2e0-9fc0bde7ec10",
+		"name": "oauth2-demo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26931608"
+	},
+	"item": [
+		{
+			"name": "oauth",
+			"item": [
+				{
+					"name": "oauth-token-password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "dingxinliang01",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "dingxinliang@123",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "dingxinliang01",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "dingxinliang@123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8500/oauth/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8500",
+							"path": [
+								"oauth",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "oauth-check-token",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8500/oauth/check_token?token=c19d0c6b-842d-41eb-96f2-b13ca9c470b3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8500",
+							"path": [
+								"oauth",
+								"check_token"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "c19d0c6b-842d-41eb-96f2-b13ca9c470b3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "oauth-token-client_credentials",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "GITEE-codejuzi",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "GITEE-codejuzi",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8500/oauth/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8500",
+							"path": [
+								"oauth",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "oauth-token-authorize",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "hebeiwangxz@123",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "hebeiwangxz",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8500/oauth/authorize?client_id=hebeiwangxz&response_type=token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8500",
+							"path": [
+								"oauth",
+								"authorize"
+							],
+							"query": [
+								{
+									"key": "client_id",
+									"value": "hebeiwangxz"
+								},
+								{
+									"key": "response_type",
+									"value": "token"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "oauth-token-authorization_code  http://localhost:8500/oauth/authorize?client_id=hebeiwangxz&response_type=code",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "authorization_code",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "hebeiwangxz",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "hebeiwangxz@123",
+									"type": "text"
+								},
+								{
+									"key": "code",
+									"value": "G7AqH2",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8500/oauth/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8500",
+							"path": [
+								"oauth",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "gateway",
+			"item": [
+				{
+					"name": "gateway-user-service-oauth-1",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer 5628869f-1698-4c8f-a3e5-d8006576d959",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:9090/user-service",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"user-service"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "gateway-user-service-oauth-2",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "c19d0c6b-842d-41eb-96f2-b13ca9c470b3",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:9090/user-service",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"user-service"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "register-login",
+					"item": [
+						{
+							"name": "register-username-password",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"content-type": true
+								}
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"userName\": \"dingxinliang01\",\n    \"passwd\": \"dingxinliang@123\",\n    \"userRole\": \"USER_ROLE\"\n}"
+								},
+								"url": {
+									"raw": "http://localhost:9090/user-service/user/register/name-password",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9090",
+									"path": [
+										"user-service",
+										"user",
+										"register",
+										"name-password"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "register-phone-code",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "phoneNumber",
+											"value": "18266668888",
+											"type": "text"
+										},
+										{
+											"key": "code",
+											"value": "666666",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:9090/user-service/user/register/phone-code",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9090",
+									"path": [
+										"user-service",
+										"user",
+										"register",
+										"phone-code"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "register-third-party-gitee",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://gitee.com/oauth/authorize/?client_id=please replace it with your own&redirect_uri=http://localhost:9001/user/register/gitee&response_type=code&state=GITEE\n",
+									"protocol": "https",
+									"host": [
+										"gitee",
+										"com"
+									],
+									"path": [
+										"oauth",
+										"authorize",
+										""
+									],
+									"query": [
+										{
+											"key": "client_id",
+											"value": "please replace it with your own"
+										},
+										{
+											"key": "redirect_uri",
+											"value": "http://localhost:9001/user/register/gitee"
+										},
+										{
+											"key": "response_type",
+											"value": "code"
+										},
+										{
+											"key": "state",
+											"value": "GITEE\n"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "login-username-password",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "dingxinliang01",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "dingxinliang@123",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:9090/user-service/user/login",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9090",
+									"path": [
+										"user-service",
+										"user",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "info",
+					"item": [
+						{
+							"name": "check-phone-bind-status",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "personId",
+										"value": "10000023",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "f20e32c4-3797-420e-bc0c-3c4efb00a40d",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:9090/user-service/user/info/check-phone-bind-status",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9090",
+									"path": [
+										"user-service",
+										"user",
+										"info",
+										"check-phone-bind-status"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "bind-phone",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "c19d0c6b-842d-41eb-96f2-b13ca9c470b3",
+										"type": "text"
+									},
+									{
+										"key": "personId",
+										"value": "10000019",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "phoneNumber",
+											"value": "18266668888",
+											"type": "text"
+										},
+										{
+											"key": "code",
+											"value": "666666",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:9090/user-service/user/info/bind-phone",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9090",
+									"path": [
+										"user-service",
+										"user",
+										"info",
+										"bind-phone"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}

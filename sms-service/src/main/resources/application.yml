@@ -12,7 +12,7 @@ spring:
         server-addr: 192.168.18.4:8837,192.168.18.4:8848,192.168.18.4:8859
         file-extension: yaml
   redis:
-    host: 8.130.102.239
+    host: please replace it with your own
     port: 6379
     timeout: 10s
     lettuce:
