@@ -1,0 +1,29 @@
+server:
+  port: 9021
+
+spring:
+  application:
+    name: canal-service
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    virtual-host: /
+    username: guest
+    password: guest
+  redis:
+    host: 8.130.102.239
+    port: 6379
+    timeout: 10s
+    lettuce:
+      pool:
+        max-active: 50
+        max-idle: 50
+        max-wait: -1ms
+        min-idle: 0
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.0.100:8837,192.168.0.100:8848,192.168.0.100:8859
+      config:
+        server-addr: 192.168.0.100:8837,192.168.0.100:8848,192.168.0.100:8859
+        file-extension: yaml

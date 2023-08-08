@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  */
 @Data
 @Component
-@ConfigurationProperties("third-party.gitee")
+@ConfigurationProperties(prefix = "third-party.gitee")
 public class GiteeConfig {
     private String clientId;
     private String clientSecret;
