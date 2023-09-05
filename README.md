@@ -15,17 +15,20 @@
 ## Project Structure
 ```
 .
+├── LICENSE
 ├── README.md
 ├── canal-service
 ├── common
 ├── doc
-│   ├── api-test # postman test 
-│   └── sql # database sql
+│   ├── api-test # Postman json data
+│   ├── oauth2  # OAuth2 document
+│   └── sql # table sql
 ├── gateway-service
 ├── oauth2-service
 ├── pom.xml
 ├── sms-service
 └── user-service
+
 ```
 
 ## Tech Stack
@@ -38,3 +41,9 @@
 - Redis 7.0.5
 - RabbitMQ 3.12.0
 - OAuth2 (SpringCloud) 2.2.5.RELEASE
+
+## Suggest
+If you are learning Oauth2, here is a good choice.
+
+I suggest you read the document first. [Click here](./doc/oauth2/OAuth2-Details.md) to read 
+the Oauth2 Details. [Click here](./doc/oauth2/OAuth2-Demo.md) to start your OAuth2 tour
